@@ -103,7 +103,7 @@ def list_files(filedir):
             return 0;
         if os.path.isfile(path):
             _files.append(path)
-    _files.remove('./'+os.path.basename(__file__))#获取自己的文件名，把自己移出列表.
+    _files.remove('./'+os.path.basename(sys.argv[0]))#获取自己的文件名，把自己移出列表.
     if './md5.json' in _files:
         _files.remove('./md5.json')               #如果存在md5.json文件，则一并排除
     if (len(_files)!=0):
