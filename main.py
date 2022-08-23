@@ -1,9 +1,9 @@
-from fileinput import filename
 import os
 import hashlib
 import json
-
-
+import sys
+import colorama
+colorama.init(autoreset=True)
 
 def main():
     print("m : MD5校验，对目录下的所有文件计算MD5并保存\nc : CheckMD5，对保存的MD5验证，确保文件完整性。")
@@ -13,9 +13,22 @@ def main():
         checkmd5()
     elif (todo == 'm'):
         print("开始计算并保存MD5")
-        countmd5()
+        computemd5()
     else:
         main()
+    
+    def choose():
+        print('r:重新选择\nl:退出程序')
+        nexttodo=input("请输入(r/l):")
+        if (nexttodo == 'l'):
+            return 0
+        elif(nexttodo == 'r'):
+            main()
+        else:
+            choose()
+
+    choose()
+
 
 #计算md5方法
 def get_file_md5(fname):
@@ -29,11 +42,13 @@ def get_file_md5(fname):
     return md.hexdigest()  #返回完整的对象
 
 #计算并写入MD5---m
-def countmd5(): 
+def computemd5(): 
     cdir = r'./'    #查找范围为自身所在的路径
     filelist = list_files(cdir)
     nfile = 0
     dic = {}
+    if(filelist==0):
+        return 0
 
     for thefile in filelist:   #遍历list下的所有文件
         nfile = nfile + 1
@@ -48,10 +63,17 @@ def countmd5():
 def checkmd5():
     cdir = r'./'
     filelist = list_files(cdir)
-    json_md5_dic = dic2json('read',True)
+    json_md5_dic = dic2json('read','any')
+
+    if (filelist==0):
+        return 0
+
 
     nfile = 0
     checkfailed = list()
+    if (json_md5_dic == 0):
+        print('\033[1;31m ' + '错误：未找到md5.json文件，请检查' +' \033[0m')
+        return 0
     for jsonfilename , jsonmd5 in json_md5_dic.items():
         nfile += 1
         print ('正在验证第' + str(nfile) + '个文件：' + jsonfilename)
@@ -84,7 +106,12 @@ def list_files(filedir):
     _files.remove('./'+os.path.basename(__file__))#获取自己的文件名，把自己移出列表.
     if './md5.json' in _files:
         _files.remove('./md5.json')               #如果存在md5.json文件，则一并排除
-    return _files
+    if (len(_files)!=0):
+        return _files
+    else:
+        print('\033[1;31m ' + '错误：路径下未找到需要计算的文件，请检查。程序不会计算自身和md5.json文件的md5' +' \033[0m')
+        return 0
+
 
 
 #创建json读取和写入的方法,分read和write，分别对应读取json到字典和把字典内容写入json。/*其实弄成def只是看得舒服而已*/
