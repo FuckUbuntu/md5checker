@@ -7,7 +7,6 @@ from domain.get_md5 import *
 colorama.init(autoreset=True)
 
 
-
 def main():
     checkmd5()
 
