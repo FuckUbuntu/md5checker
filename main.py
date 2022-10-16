@@ -3,6 +3,7 @@ import sys
 import colorama
 from domain.jsonrw import *
 from domain.get_md5 import *
+from domain.sizer import *
 
 
 colorama.init(autoreset=True)
@@ -43,9 +44,10 @@ def computemd5():
 
     for thefile in filelist:   #遍历list下的所有文件
         nfile = nfile + 1
-        print('\033[1;33m ' + '正在计算第' + str(nfile) + '个文件：' + thefile + '的MD5' + ' \033[0m')
+        filesize=autosize(os.path.getsize(thefile))
+        print('\033[1;33m ' + '正在计算第' + str(nfile) + '个文件：' + thefile + '(' + filesize + ')' + '的MD5' + ' \033[0m')
         filemd5 = get_file_md5(thefile)#调用上面的函数，计算出MD5值。
-        print ('\033[1;32m ' + '第' + str(nfile) + '个文件:' + thefile + ',MD5计算完成：' + filemd5 + ' \033[0m')
+        print ('\033[1;32m ' + '第' + str(nfile) + '个文件:' + thefile + ',MD5计算完成：' + filemd5 +  '\033[0m')
         dic[thefile] = filemd5
 
     dic2json(dic)
@@ -67,7 +69,8 @@ def checkmd5():
         return 0
     for jsonfilename , jsonmd5 in json_md5_dic.items():
         nfile += 1
-        print ('正在验证第' + str(nfile) + '个文件：' + jsonfilename)
+        filesize=autosize(os.path.getsize(jsonfilename))
+        print ('正在验证第' + str(nfile) + '个文件：' + jsonfilename + '(' + filesize + ')')
         filemd5 = get_file_md5(jsonfilename)
         if (filemd5 == jsonmd5):
             print('\033[1;32m ' + '文件' + jsonfilename + '的MD5验证通过：' + jsonmd5 + ' \033[0m')

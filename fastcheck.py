@@ -3,6 +3,7 @@ import sys
 import colorama
 from domain.jsonrw import json2dic
 from domain.get_md5 import *
+from domain.sizer import *
 
 colorama.init(autoreset=True)
 
@@ -30,7 +31,8 @@ def checkmd5():
     for jsonfilename , jsonmd5 in json_md5_dic.items():
         if(jsonfilename in filelist):
             nfile += 1
-            print ('正在验证第' + str(nfile) + '个文件：' + jsonfilename)
+            filesize=autosize(os.path.getsize(jsonfilename))
+            print ('正在验证第' + str(nfile) + '个文件：' + jsonfilename + '(' + filesize + ')')
             filemd5 = get_file_md5(jsonfilename)
             if (filemd5 == jsonmd5):
                 print('\033[1;32m ' + '文件' + jsonfilename + '的MD5验证通过：' + jsonmd5 + ' \033[0m')
