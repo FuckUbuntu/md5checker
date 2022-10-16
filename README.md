@@ -10,5 +10,9 @@
 
 ## 使用提示
 软件会在读取文件列表时屏蔽自身和md5.json文件。<br>
-因此如果两者共存在一个目录下，使用FastCheck验证时会提示找不到文件FastCheck.exe，而有新文件MD5Checker。
+因此如果两者共存在一个目录下，使用FastCheck验证时会提示找不到文件FastCheck.exe，而有新文件MD5Checker。<br>
 目前已支持读取下级文件夹内的文件
+
+## 更新说明
+尝试做一下界面。<br>
+新建文件夹.jpg<br>
